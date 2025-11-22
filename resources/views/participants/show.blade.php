@@ -57,7 +57,7 @@
                                     {{ $course->level ?? '-' }}
                                 </td>
                                 <td class="px-4 py-2 text-gray-900">
-                                    {{ optional($course->pivot->enrolled_at)->format('Y-m-d H:i') ?? '-' }}
+                                    {{ $course->pivot->enrolled_at ?? '-' }}
                                 </td>
                                 <td class="px-4 py-2 text-gray-900 text-right space-x-2">
                                     <a href="{{ route('courses.show', $course) }}"
