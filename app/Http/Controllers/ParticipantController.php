@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Participant;
+use App\Models\Course;
 use Illuminate\Http\Request;
 
 class ParticipantController extends Controller
@@ -50,10 +51,17 @@ class ParticipantController extends Controller
      */
     public function show(Participant $participant)
     {
-        // Load related courses (many-to-many)
+        // Load related courses
         $participant->load('courses');
 
-        return view('participants.show', compact('participant'));
+        // Courses that this participant is NOT enrolled in yet (for dropdown)
+        $availableCourses = Course::whereDoesntHave('participants', function ($query) use ($participant) {
+                $query->where('participants.id', $participant->id);
+            })
+            ->orderBy('title')
+            ->get();
+
+        return view('participants.show', compact('participant', 'availableCourses'));
     }
 
     /**
